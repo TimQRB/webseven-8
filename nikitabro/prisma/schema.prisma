@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+}
+
+model User {
+  id       String @id @default(uuid())
+  login    String @unique
+  email    String @unique
+  password String
+  avatarUrl String? @map("avatar_url")
+  role     Role   @default(CLIENT)
+
+  @@map("users")
+}
+
+model WaterBody {
+  id            String @id @default(uuid())
+  name          String
+  district      String?
+  locationDesc  String? @map("location_desc")
+
+  latitude      Float?
+  longitude     Float?
+  boundaries    Json?
+
+  cadastralNumber String? @map("cadastral_number")
+
+  passport      WaterBodyPassport?
+  measurements  BioindicationRecord[]
+
+  @@map("water_bodies")
+}
+
+model WaterBodyPassport {
+  id          String @id @default(uuid())
+  waterBodyId String @unique @map("water_body_id")
+  waterBody   WaterBody @relation(fields: [waterBodyId], references: [id], onDelete: Cascade)
+
+  area            Float? @map("area_ha")
+  overgrowthArea  Float? @map("overgrowth_area_ha")
+  altitude        Float? @map("altitude_m")
+  length          Float? @map("length_km")
+  maxWidth        Float? @map("max_width_km")
+  coastlineLength Float? @map("coastline_length_km")
+  coastlineDev    Float? @map("coastline_development")
+  catchmentArea   Float? @map("catchment_area_sq_km")
+  currentDepth    Float? @map("current_depth_m")
+  maxDepth        Float? @map("max_depth_m")
+  avgDepth        Float? @map("avg_depth_m")
+  volume          Float? @map("volume_mln_m3")
+
+  fisheryType            String? @map("fishery_type")
+  fishProductivity       Float? @map("fish_productivity")
+  economicDesc           String? @db.Text @map("economic_desc")
+  waterProtectionZone    String? @map("water_protection_zone")
+  waterProtectionStrip   String? @map("water_protection_strip")
+
+  ichthyofauna   String? @db.Text
+  mammals        String? @db.Text
+  invertebrates  String? @db.Text
+
+  @@map("water_body_passports")
+}
+
+model BioindicationRecord {
+  id          String @id @default(uuid())
+  waterBodyId String @map("water_body_id")
+  waterBody   WaterBody @relation(fields: [waterBodyId], references: [id], onDelete: Cascade)
+
+  recordDate DateTime @default(now()) @map("record_date")
+
+  turbidity           Float?
+  dissolvedGases      String? @map("dissolved_gases")
+  biogenicCompounds   String? @map("biogenic_compounds")
+  permanganateOxid    Float? @map("permanganate_oxid")
+
+  mineralization      Float?
+  salinity            Float?
+  hardness            Float?
+  calcium             Float?
+  magnesium           Float?
+  chlorides           Float?
+  sulfates            Float?
+  hydrocarbons        Float?
+  potassiumSodium     Float? @map("potassium_sodium")
+
+  overgrowthPercent   Float? @map("overgrowth_percent")
+  overgrowthDegree    String? @map("overgrowth_degree")
+
+  phytoplanktonDev    String? @db.Text @map("phytonplankton_dev")
+  zooplanktonTaxa     String? @db.Text @map("zooplankton_taxa")
+  zooplanktonGroups   String? @db.Text @map("zooplankton_groups")
+  zoobenthosTaxa      String? @db.Text @map("zoobenthos_taxa")
+  zoobenthosGroups    String? @db.Text @map("zoobenthos_groups")
+  trophicStatus       String? @map("trophic_status")
+
+  @@map("bioindication_records")
+}
