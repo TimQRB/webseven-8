@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@netlify/plugin-nextjs": "^5.15.9",
     "maplibre-gl": "5.21.1",
     "next": "15.2.8",
     "react": "19.0.0",
