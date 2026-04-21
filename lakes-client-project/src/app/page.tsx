@@ -6,24 +6,24 @@ import { KpiCard } from '@/components/KpiCard';
 export default function HomePage() {
   return (
     <ProtectedShell>
-      <div className="stack">
+      <div className="stack home-stack">
         <PageHeader
           title="Главная"
           description="Клиентский интерфейс для просмотра озёр, карты и аналитики по каждому водоёму."
           action={
-            <Link className="btn" href="/water-bodies">
+            <Link className="btn home-cta" href="/water-bodies">
               Открыть карту озёр
             </Link>
           }
         />
 
-        <section className="grid cards-3">
+        <section className="grid cards-3 home-kpis">
           <KpiCard title="Карта водоёмов" value="MapLibre" hint="Выбор озера на карте и через dropdown" />
           <KpiCard title="Личный кабинет" value="Профиль" hint="Данные пользователя и аватарка" />
           <KpiCard title="Дашборд озера" value="Графики" hint="Фильтр по году и параметру" />
         </section>
 
-        <section className="card stack">
+        <section className="card stack home-details">
           <h2 className="section-title">Что есть в клиентской версии</h2>
           <div className="details-grid">
             <div><strong>Хедер:</strong> адаптивный и общий для всех защищённых страниц.</div>
